@@ -33,6 +33,25 @@ fn main() {
     file.write_all(format!("nameserver {}\n", dns.3).as_bytes()).expect("write failed");
 
 
+
+    // chattr -i /etc/resolv.conf
+    let mut cmd = std::process::Command::new("chattr");
+    cmd.arg("-i");
+    cmd.arg("/etc/resolv.conf");
+    let output = cmd.output().expect("failed to execute process");
+    println!("{}", String::from_utf8_lossy(&output.stdout));
+    println!("{}", String::from_utf8_lossy(&output.stderr));
+
+    // Choose set DNS forever or only for this session
+    println!("Do you want to set DNS forever? (y/n)");
+    let mut forever = String::new();
+    std::io::stdin()
+        .read_line(&mut forever)
+        .expect("Failed to read line");
+    let forever = forever.trim();
+
+
+
     // change dns
     let mut cmd = std::process::Command::new("cp");
     cmd.arg("-r");
@@ -42,6 +61,21 @@ fn main() {
     println!("{}", String::from_utf8_lossy(&output.stdout));
     println!("{}", String::from_utf8_lossy(&output.stderr));
     println!("DNS changed to {}", dns.1);
+
+
+    // chattr +i /etc/resolv.conf
+    if forever == "y" {
+        // chattr +i /etc/resolv.conf
+        let mut cmd = std::process::Command::new("chattr");
+        cmd.arg("+i");
+        cmd.arg("/etc/resolv.conf");
+        let output = cmd.output().expect("failed to execute process");
+        println!("{}", String::from_utf8_lossy(&output.stdout));
+        println!("{}", String::from_utf8_lossy(&output.stderr));
+    }
+    else {
+        println!("DNS will change to default after reboot!");
+    }
     println!("Done!");
     println!("\n GitHub: Mohuva13");
 
