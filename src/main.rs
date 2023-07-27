@@ -33,6 +33,17 @@ fn main() {
     file.write_all(format!("nameserver {}\n", dns.3).as_bytes()).expect("write failed");
 
 
+    // change dns
+    let mut cmd = std::process::Command::new("cp");
+    cmd.arg("-r");
+    cmd.arg("./choosen_dns.txt");
+    cmd.arg("/etc/resolv.conf");
+    let output = cmd.output().expect("failed to execute process");
+    println!("{}", String::from_utf8_lossy(&output.stdout));
+    println!("{}", String::from_utf8_lossy(&output.stderr));
+    println!("DNS changed to {}", dns.1);
+    println!("Done!");
+    println!("\n GitHub: Mohuva13");
 
 
 }
