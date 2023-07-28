@@ -21,12 +21,13 @@ fn main() {
     let find_fastest = find_fastest.trim();
     if find_fastest == "y" {
         println!("Finding fastest DNS...");
+        println!("\n");
         let mut fastest_dns = ("", "", "", "");
         let mut fastest_time = 1000000.0;
 
 
 
-
+        run_loading("10");
 
         // ping test
         for dns in dns_list.iter() {
@@ -48,6 +49,14 @@ fn main() {
                 }
             }
         }
+
+
+
+        run_loading("50");
+        run_loading("85");
+        run_loading("100");
+
+
         println!("Fastest DNS is: {} - {} - {} - {} - {}ms", fastest_dns.0, fastest_dns.1, fastest_dns.2, fastest_dns.3, fastest_time);
         println!("Do you want to use this DNS? (y/n)");
         let mut use_fastest = String::new();
@@ -178,6 +187,7 @@ fn main() {
         let forever = forever.trim();
 
 
+
         // change dns
         let mut cmd = std::process::Command::new("cp");
         cmd.arg("-r");
@@ -191,6 +201,10 @@ fn main() {
 
         // chattr +i /etc/resolv.conf
         if forever == "y" {
+
+            run_loading("100");
+
+
             // chattr +i /etc/resolv.conf
             let mut cmd = std::process::Command::new("chattr");
             cmd.arg("+i");
@@ -199,9 +213,18 @@ fn main() {
             println!("{}", String::from_utf8_lossy(&output.stdout));
             println!("{}", String::from_utf8_lossy(&output.stderr));
         } else {
+            run_loading("100");
             println!("DNS will change to default after reboot!");
         }
         println!("Done!");
         println!("\n GitHub: Mohuva13");
     }
+}
+
+fn run_loading(time: &str){
+    let mut cmd = std::process::Command::new("bash");
+    cmd.arg("./loading_.sh");
+    cmd.arg(time);
+    let output = cmd.output().expect("failed to execute process");
+    println!("{}", String::from_utf8_lossy(&output.stdout));
 }
