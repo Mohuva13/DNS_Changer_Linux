@@ -24,6 +24,10 @@ fn main() {
         let mut fastest_dns = ("", "", "", "");
         let mut fastest_time = 1000000.0;
 
+
+
+
+
         // ping test
         for dns in dns_list.iter() {
             let mut cmd = std::process::Command::new("ping");
