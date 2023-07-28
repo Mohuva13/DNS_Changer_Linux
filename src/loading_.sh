@@ -8,7 +8,6 @@
     LW='\033[1;37m'
     NC='\033[0m'
     if [ "${1}" = "0" ]; then TME=$(date +"%s"); fi
-    SEC=`printf "%04d\n" $((($(date +"%s"))-(${TME})))`; SEC="$SEC sec"
     PRC=`printf "%.0f" ${1}`
     SHW=`printf "%3d\n" ${PRC}`
     LNE=`printf "%.0f" $((${PRC}/2))`
