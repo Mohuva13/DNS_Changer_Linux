@@ -1,4 +1,4 @@
-use std::io::Write;
+use std::io::{BufRead, Write};
 use nix::unistd::Uid;
 mod all_dns;
 
@@ -49,12 +49,11 @@ fn main() {
                 }
             }
         }
-
-
-
         run_loading("50");
         run_loading("85");
         run_loading("100");
+
+
 
 
         println!("Fastest DNS is: {} - {} - {} - {} - {}ms", fastest_dns.0, fastest_dns.1, fastest_dns.2, fastest_dns.3, fastest_time);
@@ -268,9 +267,8 @@ fn main() {
 }
 
 fn run_loading(time: &str){
-    let mut cmd = std::process::Command::new("bash");
-    cmd.arg("./loading_.sh");
-    cmd.arg(time);
-    let output = cmd.output().expect("failed to execute process");
-    println!("{}", String::from_utf8_lossy(&output.stdout));
+    std::process::Command::new("sh")
+        .arg("./loading_.sh")
+        .arg(time)
+        .spawn().expect("");
 }
