@@ -181,7 +181,18 @@ fn main() {
             cmd.arg(dns.2);
             let output = cmd.output().expect("failed to execute process");
 
-
+            //Show ping result
+            {
+                let output = String::from_utf8_lossy(&output.stdout);
+                let output = output.split("\n").collect::<Vec<&str>>();
+                let output = output[output.len() - 2].split(" ").collect::<Vec<&str>>();
+                let output = output[output.len() - 2].split("/").collect::<Vec<&str>>();
+                run_loading("100");
+                println!("Ping result:");
+                println!("Min: {}ms", output[0]);
+                println!("Max: {}ms", output[2]);
+                println!("Average: {}ms", output[1]);
+            }
 
             // Ask user set DNS or not
             println!("Do you want to set DNS? (y/n)");
