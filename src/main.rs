@@ -49,9 +49,11 @@ fn main() {
                 }
             }
         }
-        run_loading("50");
-        run_loading("85");
-        run_loading("100");
+        {
+            run_loading("50");
+            run_loading("85");
+            run_loading("100");
+        }
 
 
 
@@ -267,8 +269,10 @@ fn main() {
 }
 
 fn run_loading(time: &str){
-    std::process::Command::new("sh")
+    let mut running = std::process::Command::new("sh")
         .arg("./loading_.sh")
         .arg(time)
         .spawn().expect("");
+
+    running.wait().expect("");
 }
