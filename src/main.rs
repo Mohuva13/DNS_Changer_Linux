@@ -1,8 +1,14 @@
-use std::io::{BufRead, Write};
+use std::io::Write;
 use nix::unistd::Uid;
 mod all_dns;
+mod cash_creator;
+
 
 fn main() {
+    // Create cash file if not exist
+    cash_creator::create_cash_dns::create_cash_dns();
+
+
     // Check user has linux root permission or not. If not, exit the program.
     if !Uid::effective().is_root() {
         println!("Please run as root!");
@@ -22,7 +28,7 @@ fn main() {
     if find_fastest == "y" {
         println!("Finding fastest DNS...");
         println!("\n");
-        let mut fastest_dns = ("", "", "", "");
+        let mut fastest_dns: (String, String, String, String) = (String::new(), String::new(), String::new(), String::new());
         let mut fastest_time = 1000000.0;
 
 
@@ -30,13 +36,13 @@ fn main() {
         run_loading("10");
 
         // ping test
-        for dns in dns_list.iter() {
+        for dns in dns_list {
             let mut cmd = std::process::Command::new("ping");
             cmd.arg("-c");
             cmd.arg("1");
             cmd.arg("-W");
             cmd.arg("1");
-            cmd.arg(dns.2);
+            cmd.arg(dns.2.clone());
             let output = cmd.output().expect("failed to execute process");
             let output = String::from_utf8_lossy(&output.stdout);
             let output = output.split("time=").collect::<Vec<&str>>();
@@ -45,7 +51,7 @@ fn main() {
                 let output = output[0].parse::<f32>().unwrap();
                 if output < fastest_time {
                     fastest_time = output;
-                    fastest_dns = *dns;
+                    fastest_dns = (dns.0, dns.1, dns.2, dns.3 );
                 }
             }
         }
@@ -179,7 +185,7 @@ fn main() {
             let mut cmd = std::process::Command::new("ping");
             cmd.arg("-c");
             cmd.arg("5");
-            cmd.arg(dns.2);
+            cmd.arg(&dns.2);
             let output = cmd.output().expect("failed to execute process");
 
             //Show ping result
