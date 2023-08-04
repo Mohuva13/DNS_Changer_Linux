@@ -61,7 +61,11 @@ fn main() {
             run_loading("100");
         }
 
-
+        // Test failed
+        if fastest_time == 1000000.0 {
+            println!("Test failed! Please try again and check your internet connection.");
+            std::process::exit(1);
+        }
 
 
         println!("Fastest DNS is: {} - {} - {} - {} - {}ms", fastest_dns.0, fastest_dns.1, fastest_dns.2, fastest_dns.3, fastest_time);
@@ -191,6 +195,27 @@ fn main() {
             //Show ping result
             {
                 let output = String::from_utf8_lossy(&output.stdout);
+
+                // Check if ping failed
+                if output.contains("100% packet loss") {
+                    println!("Ping failed!");
+                    println!("\n GitHub: Mohuva13");
+                    std::process::exit(1);
+                    }
+
+                if output.contains("unknown host") {
+                    println!("Ping failed!");
+                    println!("\n GitHub: Mohuva13");
+                    std::process::exit(1);
+                }
+
+                if output == ""{
+                    println!("\n Ping failed!");
+                    println!("\n Check your internet connection and try again later!");
+                    println!("\n GitHub: Mohuva13");
+                    std::process::exit(1);
+                }
+
                 let output = output.split("\n").collect::<Vec<&str>>();
                 let output = output[output.len() - 2].split(" ").collect::<Vec<&str>>();
                 let output = output[output.len() - 2].split("/").collect::<Vec<&str>>();
