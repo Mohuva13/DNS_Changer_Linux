@@ -108,7 +108,11 @@ fn main() {
                 let output = cmd.output().expect("failed to execute process");
                 println!("{}", String::from_utf8_lossy(&output.stdout));
                 println!("{}", String::from_utf8_lossy(&output.stderr));
-                println!("DNS changed to {}", fastest_dns.1);
+
+                {
+                    run_loading("100");
+                }
+                println!("\n DNS changed to {}", fastest_dns.1);
 
                 // chattr +i /etc/resolv.conf
                 let mut cmd = std::process::Command::new("chattr");
@@ -141,7 +145,10 @@ fn main() {
                 let output = cmd.output().expect("failed to execute process");
                 println!("{}", String::from_utf8_lossy(&output.stdout));
                 println!("{}", String::from_utf8_lossy(&output.stderr));
-                println!("DNS changed to {}", fastest_dns.1);
+                {
+                    run_loading("100");
+                }
+                println!("\n DNS changed to {}", fastest_dns.1);
 
                 println!("DNS will change to default after reboot!");
                 println!("Done!");
