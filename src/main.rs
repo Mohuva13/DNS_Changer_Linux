@@ -171,6 +171,14 @@ fn main() {
             .read_line(&mut dns_index)
             .expect("Failed to read line");
         let dns_index: usize = dns_index.trim().parse().expect("Please type a number!");
+
+        // Check dns_index is out of range
+        if dns_index > dns_list.len() - 1 {
+            println!("Please choose a number in list!");
+            std::process::exit(1);
+        }
+
+
         let dns = &dns_list[dns_index];
         println!("You choose: {}", dns.1);
 
