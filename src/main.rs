@@ -1,7 +1,14 @@
 use std::io::Write;
 use nix::unistd::Uid;
+
+mod applyer;
+use applyer::apply::run_loading as run_loading;
+use applyer::apply::chattr_cmd as chattr_cmd;
+use applyer::apply::copy_dns_file as copy_dns_file;
+
 mod all_dns;
 mod cash_creator;
+
 
 
 fn main() {
@@ -90,24 +97,13 @@ fn main() {
             let forever = forever.trim();
             if forever == "y" {
                 // chattr -i /etc/resolv.conf
-                let mut cmd = std::process::Command::new("chattr");
-                cmd.arg("-i");
-                cmd.arg("/etc/resolv.conf");
-                let output = cmd.output().expect("failed to execute process");
-                println!("{}", String::from_utf8_lossy(&output.stdout));
-                println!("{}", String::from_utf8_lossy(&output.stderr));
+                chattr_cmd("-i");
 
                 //export choosen dns
                 cash_creator::create_cash_dns::export_chosen_dns(fastest_dns.2.clone(), fastest_dns.3.clone());
 
                 // change dns
-                let mut cmd = std::process::Command::new("cp");
-                cmd.arg("-r");
-                cmd.arg("./chosen_dns.txt");
-                cmd.arg("/etc/resolv.conf");
-                let output = cmd.output().expect("failed to execute process");
-                println!("{}", String::from_utf8_lossy(&output.stdout));
-                println!("{}", String::from_utf8_lossy(&output.stderr));
+                copy_dns_file();
 
                 {
                     run_loading("100");
@@ -115,36 +111,20 @@ fn main() {
                 println!("\n DNS changed to {}", fastest_dns.1);
 
                 // chattr +i /etc/resolv.conf
-                let mut cmd = std::process::Command::new("chattr");
-                cmd.arg("+i");
-                cmd.arg("/etc/resolv.conf");
-                let output = cmd.output().expect("failed to execute process");
-                println!("{}", String::from_utf8_lossy(&output.stdout));
-                println!("{}", String::from_utf8_lossy(&output.stderr));
+                chattr_cmd("+i");
 
                 println!("Done!");
                 println!("\n GitHub: Mohuva13");
             } else {
                 // chattr -i /etc/resolv.conf
-                let mut cmd = std::process::Command::new("chattr");
-                cmd.arg("-i");
-                cmd.arg("/etc/resolv.conf");
-                let output = cmd.output().expect("failed to execute process");
-                println!("{}", String::from_utf8_lossy(&output.stdout));
-                println!("{}", String::from_utf8_lossy(&output.stderr));
+                chattr_cmd("-i");
 
 
                 //export choosen dns
                 cash_creator::create_cash_dns::export_chosen_dns(fastest_dns.2.clone(), fastest_dns.3.clone());
 
                 // change dns
-                let mut cmd = std::process::Command::new("cp");
-                cmd.arg("-r");
-                cmd.arg("./chosen_dns.txt");
-                cmd.arg("/etc/resolv.conf");
-                let output = cmd.output().expect("failed to execute process");
-                println!("{}", String::from_utf8_lossy(&output.stdout));
-                println!("{}", String::from_utf8_lossy(&output.stderr));
+                copy_dns_file();
                 {
                     run_loading("100");
                 }
@@ -251,12 +231,7 @@ fn main() {
         cash_creator::create_cash_dns::export_chosen_dns(dns.2.clone(), dns.3.clone());
 
         // chattr -i /etc/resolv.conf
-        let mut cmd = std::process::Command::new("chattr");
-        cmd.arg("-i");
-        cmd.arg("/etc/resolv.conf");
-        let output = cmd.output().expect("failed to execute process");
-        println!("{}", String::from_utf8_lossy(&output.stdout));
-        println!("{}", String::from_utf8_lossy(&output.stderr));
+        chattr_cmd("-i");
 
         // Choose set DNS forever or only for this session
         println!("Do you want to set DNS forever? (y/n)");
@@ -269,29 +244,17 @@ fn main() {
 
 
         // change dns
-        let mut cmd = std::process::Command::new("cp");
-        cmd.arg("-r");
-        cmd.arg("./chosen_dns.txt");
-        cmd.arg("/etc/resolv.conf");
-        let output = cmd.output().expect("failed to execute process");
-        println!("{}", String::from_utf8_lossy(&output.stdout));
-        println!("{}", String::from_utf8_lossy(&output.stderr));
+        copy_dns_file();
         println!("DNS changed to {}", dns.1);
 
 
-        // chattr +i /etc/resolv.conf
         if forever == "y" {
 
             run_loading("100");
 
 
             // chattr +i /etc/resolv.conf
-            let mut cmd = std::process::Command::new("chattr");
-            cmd.arg("+i");
-            cmd.arg("/etc/resolv.conf");
-            let output = cmd.output().expect("failed to execute process");
-            println!("{}", String::from_utf8_lossy(&output.stdout));
-            println!("{}", String::from_utf8_lossy(&output.stderr));
+            chattr_cmd("+i");
         } else {
             run_loading("100");
             println!("DNS will change to default after reboot!");
@@ -301,11 +264,3 @@ fn main() {
     }
 }
 
-fn run_loading(time: &str){
-    let mut running = std::process::Command::new("sh")
-        .arg("./loading_.sh")
-        .arg(time)
-        .spawn().expect("");
-
-    running.wait().expect("");
-}
