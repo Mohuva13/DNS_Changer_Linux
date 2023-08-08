@@ -1,7 +1,14 @@
 use std::io::Write;
 use nix::unistd::Uid;
+
+mod applyer;
+use applyer::apply::run_loading as run_loading;
+use applyer::apply::chattr_cmd as chattr_cmd;
+use applyer::apply::copy_dns_file as copy_dns_file;
+
 mod all_dns;
 mod cash_creator;
+
 
 
 fn main() {

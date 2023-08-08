@@ -1,5 +1,5 @@
 pub mod apply {
-    fn run_loading(time: &str){
+    pub fn run_loading(time: &str){
         let mut running = std::process::Command::new("sh")
             .arg("./loading_.sh")
             .arg(time)
@@ -8,7 +8,7 @@ pub mod apply {
         running.wait().expect("");
     }
 
-    fn chattr_cmd(access_opt: &str){
+    pub fn chattr_cmd(access_opt: &str){
         let mut cmd = std::process::Command::new("chattr");
         cmd.arg(access_opt);
         cmd.arg("/etc/resolv.conf");
@@ -17,7 +17,7 @@ pub mod apply {
         println!("{}", String::from_utf8_lossy(&output.stderr));
     }
 
-    fn copy_dns_file(){
+    pub fn copy_dns_file(){
         let mut cmd = std::process::Command::new("cp");
         cmd.arg("-r");
         cmd.arg("./chosen_dns.txt");
