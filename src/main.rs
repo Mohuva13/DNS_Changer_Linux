@@ -96,13 +96,7 @@ fn main() {
                 cash_creator::create_cash_dns::export_chosen_dns(fastest_dns.2.clone(), fastest_dns.3.clone());
 
                 // change dns
-                let mut cmd = std::process::Command::new("cp");
-                cmd.arg("-r");
-                cmd.arg("./chosen_dns.txt");
-                cmd.arg("/etc/resolv.conf");
-                let output = cmd.output().expect("failed to execute process");
-                println!("{}", String::from_utf8_lossy(&output.stdout));
-                println!("{}", String::from_utf8_lossy(&output.stderr));
+                copy_dns_file();
 
                 {
                     run_loading("100");
@@ -123,13 +117,7 @@ fn main() {
                 cash_creator::create_cash_dns::export_chosen_dns(fastest_dns.2.clone(), fastest_dns.3.clone());
 
                 // change dns
-                let mut cmd = std::process::Command::new("cp");
-                cmd.arg("-r");
-                cmd.arg("./chosen_dns.txt");
-                cmd.arg("/etc/resolv.conf");
-                let output = cmd.output().expect("failed to execute process");
-                println!("{}", String::from_utf8_lossy(&output.stdout));
-                println!("{}", String::from_utf8_lossy(&output.stderr));
+                copy_dns_file();
                 {
                     run_loading("100");
                 }
@@ -249,13 +237,7 @@ fn main() {
 
 
         // change dns
-        let mut cmd = std::process::Command::new("cp");
-        cmd.arg("-r");
-        cmd.arg("./chosen_dns.txt");
-        cmd.arg("/etc/resolv.conf");
-        let output = cmd.output().expect("failed to execute process");
-        println!("{}", String::from_utf8_lossy(&output.stdout));
-        println!("{}", String::from_utf8_lossy(&output.stderr));
+        copy_dns_file();
         println!("DNS changed to {}", dns.1);
 
 
@@ -275,20 +257,3 @@ fn main() {
     }
 }
 
-fn run_loading(time: &str){
-    let mut running = std::process::Command::new("sh")
-        .arg("./loading_.sh")
-        .arg(time)
-        .spawn().expect("");
-
-    running.wait().expect("");
-}
-
-fn chattr_cmd(access_opt: &str){
-    let mut cmd = std::process::Command::new("chattr");
-    cmd.arg(access_opt);
-    cmd.arg("/etc/resolv.conf");
-    let output = cmd.output().expect("failed to execute process");
-    println!("{}", String::from_utf8_lossy(&output.stdout));
-    println!("{}", String::from_utf8_lossy(&output.stderr));
-}
