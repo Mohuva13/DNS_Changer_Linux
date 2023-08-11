@@ -8,4 +8,7 @@ Simple DNS changer for Linux
 
     $ sudo ./DNS_Changer_Linux 
 
+## Apply DNS with args
+` $ sudo ./DNS_Changer_Linux -n1 1.1.1.1 -n2 1.0.0.1 `
+
 *Have a nice day!*  :D
