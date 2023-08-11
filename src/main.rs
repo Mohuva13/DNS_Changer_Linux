@@ -1,10 +1,10 @@
-use std::io::Write;
 use nix::unistd::Uid;
 
 mod applyer;
 use applyer::apply::run_loading as run_loading;
 use applyer::apply::chattr_cmd as chattr_cmd;
 use applyer::apply::copy_dns_file as copy_dns_file;
+use crate::cash_creator::create_cash_dns::export_chosen_dns;
 
 mod all_dns;
 mod cash_creator;
@@ -23,6 +23,36 @@ fn main() {
     }
 
 
+    // Fast apply dns with args
+    let args: Vec<String> = std::env::args().collect();
+    if args.len() == 5 {
+        if args[1] == "-n1" && args[3] == "-n2" {
+            // check dns is valid or not
+            let mut dns1 = args[2].clone();
+            let mut dns2 = args[4].clone();
+            if dns1.split(".").collect::<Vec<&str>>().len() == 4 && dns2.split(".").collect::<Vec<&str>>().len() == 4 {
+
+                // chattr -i /etc/resolv.conf
+                chattr_cmd("-i");
+
+                export_chosen_dns(dns1.clone(), dns2.clone());
+                copy_dns_file();
+
+                {
+                    run_loading("100");
+                }
+
+                println!("\n Done!");
+                println!("\n GitHub: Mohuva13");
+                std::process::exit(0);
+
+            }else {
+                println!("Invalid DNS!");
+                std::process::exit(1);
+            }
+
+        }
+    }
 
     let dns_list = all_dns::dns_loader::load_dns();
 
