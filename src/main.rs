@@ -6,6 +6,7 @@ use applyer::apply::chattr_cmd as chattr_cmd;
 use applyer::apply::copy_dns_file as copy_dns_file;
 use crate::cash_creator::create_cash_dns::export_chosen_dns;
 
+mod Loading_generator;
 mod all_dns;
 mod cash_creator;
 
@@ -19,6 +20,8 @@ fn main() {
     // Create cash file if not exist
     cash_creator::create_cash_dns::create_cash_dns();
 
+    // Create shell script login file
+    Loading_generator::loading_writer::write_loading();
 
 
 

@@ -3,7 +3,7 @@ pub mod loading_writer{
     use std::io::prelude::*;
     use std::env;
 
-    pub fn write_loading(time: &str){
+    pub fn write_loading(){
         let home_dir = env::var("HOME").unwrap();
         let mut home_dir = home_dir + "/.config/DNS_Changer_Linux";
         let mut file = File::create(home_dir + "/loading_.sh").expect("create failed");;
