@@ -12,6 +12,10 @@ mod cash_creator;
 
 
 fn main() {
+
+    // Create config directory if not exist
+    cash_creator::create_cash_dns::create_config_directory();
+
     // Create cash file if not exist
     cash_creator::create_cash_dns::create_cash_dns();
 
