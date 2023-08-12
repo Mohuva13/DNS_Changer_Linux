@@ -1,5 +1,17 @@
 pub mod create_cash_dns{
     use std::io::Write;
+    use std::env;
+
+    pub fn create_config_directory(){
+        let home_dir = env::var("HOME").unwrap();
+        let mut home_dir = home_dir + "/.config/DNS_Changer_Linux";
+
+        // check home_dir directory is exist or not
+        let path = std::path::Path::new(&home_dir);
+        if !path.exists() {
+            std::fs::create_dir_all(&home_dir).expect("failed to create directory");
+        }
+    }
 
     pub fn create_cash_dns(){
         let mut file = std::fs::File::create("./all_dns.txt").expect("create failed");
