@@ -2,8 +2,17 @@ pub mod apply {
     use std::env;
 
     pub fn run_loading(time: &str){
+        let home_dir = env::var("HOME").unwrap();
+        let mut home_dir = home_dir + "/.config/DNS_Changer_Linux";
+
+        // chmod +x loading_.sh
+        let mut cmd = std::process::Command::new("chmod");
+        cmd.arg("+x");
+        cmd.arg(&home_dir + "/loading_.sh");
+        let output = cmd.output().expect("failed to execute process");
+
         let mut running = std::process::Command::new("sh")
-            .arg("./loading_.sh")
+            .arg(home_dir + "/loading_.sh")
             .arg(time)
             .spawn().expect("");
 
