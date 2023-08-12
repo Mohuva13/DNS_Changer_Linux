@@ -8,7 +8,7 @@ pub mod apply {
         // chmod +x loading_.sh
         let mut cmd = std::process::Command::new("chmod");
         cmd.arg("+x");
-        cmd.arg(&home_dir + "/loading_.sh");
+        cmd.arg(home_dir.clone() + "/loading_.sh");
         let output = cmd.output().expect("failed to execute process");
 
         let mut running = std::process::Command::new("sh")
