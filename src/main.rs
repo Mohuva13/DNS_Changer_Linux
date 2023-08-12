@@ -36,7 +36,7 @@ fn main() {
     let args: Vec<String> = std::env::args().collect();
 
     // -h or --help
-    if args.len() == 1 || args[1] == "-h" || args[1] == "--help" {
+    if args.contains(&"-h".to_string()) || args.contains(&"--help".to_string()) {
         println!("Usage: sudo ./DNS_Changer_Linux [OPTIONS] [DNS1] [OPTIONS] [DNS2]");
         println!("OPTIONS:");
         println!("-h, --help\t\t\tShow help");

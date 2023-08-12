@@ -1,10 +1,14 @@
 pub mod dns_loader{
     use std::io::BufRead;
+    use std::env;
 
     pub fn load_dns() -> Vec<(String, String, String, String)> {
         let mut dns_list: Vec<(String, String, String, String)> = Vec::new();
 
-        let file = std::fs::File::open("./all_dns.txt").expect("open failed");
+        let home_dir = env::var("HOME").unwrap();
+        let mut home_dir = home_dir + "/.config/DNS_Changer_Linux";
+
+        let file = std::fs::File::open(home_dir + "/all_dns.txt").expect("open failed");
         let reader = std::io::BufReader::new(&file);
         for line in reader.lines() {
             let line = line.unwrap();
