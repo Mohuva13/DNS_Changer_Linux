@@ -6,14 +6,24 @@ use applyer::apply::chattr_cmd as chattr_cmd;
 use applyer::apply::copy_dns_file as copy_dns_file;
 use crate::cash_creator::create_cash_dns::export_chosen_dns;
 
+mod Loading_generator;
 mod all_dns;
 mod cash_creator;
 
 
 
 fn main() {
+
+    // Create config directory if not exist
+    cash_creator::create_cash_dns::create_config_directory();
+
     // Create cash file if not exist
     cash_creator::create_cash_dns::create_cash_dns();
+
+    // Create shell script login file
+    Loading_generator::loading_writer::write_loading();
+
+
 
 
     // Check user has linux root permission or not. If not, exit the program.
@@ -23,8 +33,22 @@ fn main() {
     }
 
 
-    // Fast apply dns with args
     let args: Vec<String> = std::env::args().collect();
+
+    // -h or --help
+    if args.contains(&"-h".to_string()) || args.contains(&"--help".to_string()) {
+        println!("Usage: sudo ./DNS_Changer_Linux [OPTIONS] [DNS1] [OPTIONS] [DNS2]");
+        println!("OPTIONS:");
+        println!("-h, --help\t\t\tShow help");
+        println!("-n1\t\t\t\tSet DNS1");
+        println!("-n2\t\t\t\tSet DNS2");
+        println!("\n");
+        println!("Example: sudo ./DNS_Changer_Linux -n1 1.1.1.1 -n2 1.0.0.1");
+        println!("Or usually run : sudo ./dns_changer_linux ");
+        std::process::exit(0);
+    }
+
+    // Fast apply dns with args
     if args.len() == 5 {
         if args[1] == "-n1" && args[3] == "-n2" {
             // check dns is valid or not
